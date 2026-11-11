@@ -2,94 +2,125 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ticketshop Prototype – improved landing page</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ticketshop Prototype – ÖBB</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<header>
-  <span class="logo">ÖBB <small>Ticketshop</small></span>
+<header class="site-header">
+  <a class="logo" href="#" aria-label="ÖBB Ticketshop">ÖBB</a>
   <nav aria-label="Hauptnavigation">
+    <button type="button" class="account" id="login-btn">
+      <span class="avatar" aria-hidden="true">👤</span>
+      <span><strong data-i18n="account">Mein Konto</strong><small data-i18n="logged_out">Nicht angemeldet</small></span>
+    </button>
     <a href="#" data-i18n="nav_products">Alle Produkte</a>
     <a href="#" data-i18n="nav_cart">Warenkorb</a>
     <a href="#" data-i18n="nav_tickets">Meine Tickets</a>
-  </nav>
-  <div class="tools">
     <div class="lang" role="group" aria-label="Sprache">
       <button type="button" data-lang="de" aria-pressed="true">DE</button>
       <button type="button" data-lang="en" aria-pressed="false">EN</button>
     </div>
-    <button type="button" class="login" id="login-btn" data-i18n="login">Anmelden</button>
-  </div>
+  </nav>
 </header>
 
-<section class="band"><h1 data-i18n="headline">Wohin soll es gehen?</h1></section>
+<section class="hero">
+  <img src="background_d5968060.svg" alt="" class="hero-img">
+  <h1 class="sr-only" data-i18n="headline">Wohin soll es gehen?</h1>
+</section>
 
 <main>
-  <form class="search" id="search-form">
-    <div class="tabs" role="radiogroup" aria-label="Tickettyp">
-      <label><input type="radio" name="tt" value="single" checked><span data-i18n="tt_single">Einzel- & Tagestickets</span></label>
-      <label><input type="radio" name="tt" value="season"><span data-i18n="tt_season">Zeitkarten</span></label>
-      <label><input type="radio" name="tt" value="reservation"><span data-i18n="tt_res">Nur Sitzplatzreservierung</span></label>
+  <form class="card search-form" id="search-form" novalidate>
+    <div class="type-row">
+      <div class="select-wrap">
+        <label for="tt" class="sr-only" data-i18n="tt_label">Tickettyp</label>
+        <select id="tt">
+          <option value="single" data-i18n="tt_single">Einzel- und Tagestickets</option>
+          <option value="season" data-i18n="tt_season">Zeitkarten</option>
+        </select>
+      </div>
+      <label class="check">
+        <input type="checkbox" id="res">
+        <span><strong data-i18n="res">Nur Sitzplatzreservierung</strong><small data-i18n="res_hint">Ich habe schon ein Ticket</small></span>
+      </label>
     </div>
 
-    <div class="grid">
-      <div><label for="from" data-i18n="from">Von</label>
-        <input id="from" list="stations" autocomplete="off" data-i18n-ph="ph_from" placeholder="z. B. Wien Hbf"></div>
-      <button type="button" class="swap" id="swap-btn" aria-label="Von und Nach tauschen">⇄</button>
-      <div><label for="to" data-i18n="to">Nach</label>
-        <input id="to" list="stations" autocomplete="off" data-i18n-ph="ph_to" placeholder="z. B. Innsbruck"></div>
+    <div class="route-row">
+      <div class="field">
+        <label for="from" class="sr-only" data-i18n="from">Von</label>
+        <input id="from" list="stations" autocomplete="off" data-i18n-ph="from" placeholder="Von">
+      </div>
+      <button type="button" class="swap" id="swap-btn" data-i18n-aria="swap" aria-label="Von und Nach tauschen">⇄</button>
+      <div class="field">
+        <label for="to" class="sr-only" data-i18n="to">Nach</label>
+        <input id="to" list="stations" autocomplete="off" data-i18n-ph="to" placeholder="Nach">
+      </div>
+      <button type="submit" class="primary" data-i18n="search">Suchen</button>
     </div>
-    <datalist id="stations"><option value="Wien Hbf"><option value="Graz Hbf"><option value="Salzburg Hbf"><option value="Innsbruck Hbf"><option value="Linz/Donau Hbf"><option value="Klagenfurt Hbf"></datalist>
 
-    <div class="row">
-      <div><label for="date" data-i18n="date">Datum</label><input id="date" type="date"></div>
-      <div><label for="time" data-i18n="time">Uhrzeit</label>
-        <div class="inline"><input id="time" type="time"><button type="button" class="ghost" id="now-btn" data-i18n="now">Jetzt</button></div></div>
-      <div><label for="pax" data-i18n="pax">Reisende</label>
+    <datalist id="stations">
+      <option value="Wien Hbf"><option value="Graz Hbf"><option value="Salzburg Hbf">
+      <option value="Innsbruck Hbf"><option value="Linz/Donau Hbf"><option value="Klagenfurt Hbf">
+    </datalist>
+
+    <div class="details-row">
+      <div class="field"><label for="date" data-i18n="date">Datum</label><input id="date" type="date"></div>
+      <div class="field"><label for="time" data-i18n="time">Uhrzeit</label>
+        <div class="inline"><input id="time" type="time"><button type="button" class="soft" id="now-btn" data-i18n="now">Jetzt</button></div></div>
+      <div class="field"><label for="pax" data-i18n="pax">Reisende</label>
         <select id="pax"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
-      <div><label for="disc" data-i18n="disc">Ermäßigung</label>
+      <div class="field"><label for="disc" data-i18n="disc">Ermäßigung</label>
         <select id="disc"><option value="none" data-i18n="disc_none">Keine</option><option value="classic">Vorteilscard Classic</option><option value="youth">Vorteilscard Jugend</option><option value="senior">Vorteilscard Senior</option></select></div>
     </div>
-
-    <button type="submit" class="primary" data-i18n="search">Verbindung suchen</button>
-    <div id="result" role="status" aria-live="polite"></div>
+    <p id="result" role="status" aria-live="polite"></p>
   </form>
 
   <section class="panel">
     <div class="head"><h2 data-i18n="recent">Zuletzt gesucht</h2>
-      <button type="button" class="link" id="clear-recent" data-i18n="clear">Alle löschen</button></div>
+      <button type="button" class="soft" id="clear-recent" data-i18n="clear">Alle löschen</button></div>
     <div id="recent" class="chips"></div>
   </section>
 
-  <section class="panel">
-    <h2 data-i18n="saved">Gespeicherte Reisen und Strecken</h2>
-    <p class="hint" data-i18n="saved_hint">Melde dich an, um Verbindungen mit dem Herz-Symbol zu speichern und auf allen Geräten wiederzufinden.</p>
-    <button type="button" class="ghost" id="saved-login" data-i18n="login">Anmelden</button>
-  </section>
+  <div class="two-col">
+    <section class="panel">
+      <div class="head"><h2 data-i18n="popular">Beliebte Produkte</h2>
+        <button type="button" class="soft" data-cta="all_products" data-i18n="all">Alle Produkte ›</button></div>
+      <ul class="products">
+        <li><button type="button" data-cta="vorteilscard"><span class="ico" aria-hidden="true">▬</span>
+          <span><strong data-i18n="p1">Vorteilscard kaufen</strong><small data-i18n="p1d">Vorteilscard Classic, Jugend & Senior: ÖBB-Standardtickets um 50 % ermäßigt</small></span></button></li>
+        <li><button type="button" data-cta="erlebnis"><span class="ico" aria-hidden="true">✦</span>
+          <span><strong data-i18n="p2">ÖBB Erlebnistickets</strong><small data-i18n="p2d">Bahn und Freizeitangebot kombinieren und dabei sparen</small></span><span class="ext" aria-hidden="true">↗</span></button></li>
+        <li><button type="button" data-cta="einfach_raus"><span class="ico" aria-hidden="true">⇥</span>
+          <span><strong>Einfach-Raus-Ticket</strong><small data-i18n="p3d">Nahverkehrs-Ticket für 2–5 Personen</small></span></button></li>
+        <li><button type="button" data-cta="freizeit"><span class="ico" aria-hidden="true">⇥</span>
+          <span><strong data-i18n="p4">Freizeit-Tickets</strong><small data-i18n="p4d">Regionale Tagestickets für den Nahverkehr</small></span></button></li>
+      </ul>
+    </section>
 
-  <section>
-    <h2 data-i18n="popular">Beliebte Produkte</h2>
-    <div class="products">
-      <div class="product"><span class="tag" data-i18n="tag_save">Spart bis zu 50 %</span><strong>Vorteilscard</strong>
-        <p data-i18n="p_vc">Classic, Jugend und Senior: ÖBB-Standardtickets um 50 % ermäßigt.</p>
-        <button type="button" data-cta="vorteilscard" data-i18n="buy">Kaufen</button></div>
-      <div class="product"><span class="tag" data-i18n="tag_group">Für 2–5 Personen</span><strong>Einfach-Raus-Ticket</strong>
-        <p data-i18n="p_er">Nahverkehrs-Ticket für Gruppen.</p>
-        <button type="button" data-cta="einfach_raus" data-i18n="view">Ansehen</button></div>
-      <div class="product"><span class="tag" data-i18n="tag_ext">Externe Seite ↗</span><strong>ÖBB Erlebnistickets</strong>
-        <p data-i18n="p_ex">Bahn und Freizeitangebot kombinieren und sparen.</p>
-        <button type="button" data-cta="erlebnis" data-i18n="view">Ansehen</button></div>
+    <div class="stack">
+      <section class="panel">
+        <div class="head"><h2 data-i18n="trips">Gemerkte Reisen</h2>
+          <button type="button" class="soft" id="saved-login" data-i18n="login">Anmelden</button></div>
+        <ol class="steps"><li data-i18n="s1">Gewünschte Verbindung suchen</li><li data-i18n="s2">Reisedetails öffnen</li><li data-i18n="s3">Auf das Herzsymbol bei „Merken“ klicken</li></ol>
+        <p class="hint" data-i18n="saved_hint">Melde dich an, um Verbindungen zu speichern und auf allen Geräten wiederzufinden.</p>
+      </section>
+      <section class="panel">
+        <div class="head"><h2 data-i18n="routes">Gemerkte Strecken</h2></div>
+        <p class="hint" data-i18n="routes_empty">Noch keine Strecken gemerkt.</p>
+      </section>
     </div>
-  </section>
+  </div>
 
-  <button class="link reset" id="reset-consent" data-i18n="cookie_settings">Cookie-Einstellungen ändern</button>
+  <button type="button" class="link" id="reset-consent" data-i18n="cookie_settings">Cookie-Einstellungen ändern</button>
 </main>
 
-<div id="banner" role="dialog" aria-label="Cookie-Einwilligung">
-  <p data-i18n="consent_text">Wir messen mit Google Analytics (über den Google Tag Manager), wie diese Seite genutzt wird – erst nach deiner Zustimmung. IP-Adressen werden anonymisiert.</p>
-  <div><button id="decline" data-i18n="decline">Ablehnen</button><button id="accept" data-i18n="accept">Zustimmen</button></div>
+<div id="banner" class="cookie-banner" role="dialog" aria-label="Cookie-Einwilligung" aria-describedby="consent_text">
+  <p id="consent_text" data-i18n="consent_text"></p>
+  <div class="cookie-actions">
+    <button type="button" id="decline" data-i18n="decline">Ablehnen</button>
+    <button type="button" id="accept" data-i18n="accept">Zustimmen</button>
+  </div>
 </div>
 
 <script src="index.js"></script>
