@@ -1,18 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ticketshop Prototype – Analytics Demo</title>
+<link rel="stylesheet" href="styles.css">
 </head>
-<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-KD3RTMKB"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-</script>
-
 <body>
-    <h1>Hallo</h1>
+
+<header>
+  <span class="logo">Ticketshop</span>
+  <nav><a href="#">Alle Produkte</a><a href="#">Warenkorb</a><a href="#">Meine Tickets</a></nav>
+</header>
+
+<main>
+  <form class="search" id="search-form">
+    <h1>Verbindung suchen</h1>
+    <div class="grid">
+      <div><label for="from">Von</label><input id="from" placeholder="z. B. Wien Hbf" autocomplete="off"></div>
+      <button type="button" class="swap" id="swap-btn" aria-label="Von und Nach tauschen">⇄</button>
+      <div><label for="to">Nach</label><input id="to" placeholder="z. B. Innsbruck" autocomplete="off"></div>
+    </div>
+    <div class="row2">
+      <div><label for="date">Datum</label><input id="date" type="date"></div>
+      <div><label for="time">Uhrzeit</label><input id="time" type="time"></div>
+      <div><label for="ticket-type">Tickettyp</label>
+        <select id="ticket-type">
+          <option value="single">Einzel- und Tagestickets</option>
+          <option value="season">Zeitkarten</option>
+          <option value="reservation">Nur Sitzplatzreservierung</option>
+        </select>
+      </div>
+    </div>
+    <button type="submit" class="primary" id="search-btn">Suchen</button>
+    <div id="result" role="status" aria-live="polite"></div>
+  </form>
+
+  <h2>Beliebte Produkte</h2>
+  <div class="products">
+    <div class="product"><strong>Vorteilscard kaufen</strong><p>ÖBB-Standardtickets um 50 % ermäßigt.</p>
+      <button data-cta="vorteilscard">Vorteilscard ansehen</button></div>
+    <div class="product"><strong>Einfach-Raus-Ticket</strong><p>Nahverkehrs-Ticket für 2–5 Personen.</p>
+      <button data-cta="einfach_raus">Ticket ansehen</button></div>
+    <div class="product"><strong>Freizeit-Tickets</strong><p>Regionale Tagestickets für den Nahverkehr.</p>
+      <button data-cta="freizeit">Ticket ansehen</button></div>
+  </div>
+
+  <button class="reset" id="reset-consent">Cookie-Einstellungen ändern</button>
+</main>
+
+<div id="banner" role="dialog" aria-label="Cookie-Einwilligung">
+  <p>Wir messen mit Google Analytics (über den Google Tag Manager), wie diese Seite genutzt wird. Das passiert erst, wenn Sie zustimmen. IP-Adressen werden anonymisiert.</p>
+  <div><button id="decline">Ablehnen</button><button id="accept">Zustimmen</button></div>
+</div>
+
+<script src="index.js"></script>
 </body>
 </html>
