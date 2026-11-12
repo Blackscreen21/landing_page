@@ -1,61 +1,4 @@
-const GTM_ID = 'GTM-KD3RTMKB';
-const MATOMO_URL = 'https://p54v94.matomo.cloud/';
-const MATOMO_SRC = 'https://cdn.matomo.cloud/p54v94.matomo.cloud/matomo.js';
-const KEY = 'analytics_consent';
-const $ = id => document.getElementById(id);
-let consented = false;
-
-/* ---------- Consent + GTM (GA4) + Matomo (laden erst nach Zustimmung) ---------- */
-function loadMatomo(){
-  const _paq = window._paq = window._paq || [];
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  _paq.push(['setTrackerUrl', MATOMO_URL + 'matomo.php']);
-  _paq.push(['setSiteId', '1']);
-  const g = document.createElement('script');
-  g.async = true;
-  g.src = MATOMO_SRC;
-  document.head.appendChild(g);
-}
-function loadGTM(){
-  if (consented) return;
-  consented = true;
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({'gtm.start': Date.now(), event: 'gtm.js'});
-  const s = document.createElement('script');
-  s.async = true;
-  s.src = 'https://www.googletagmanager.com/gtm.js?id=' + GTM_ID;
-  document.head.appendChild(s);
-  loadMatomo();
-}
-function track(name, params){            // ohne Einwilligung wird nichts gesendet
-  if (!consented) return;
-  window.dataLayer.push(Object.assign({event: name}, params || {}));      // GA4 via GTM
-  const label = params ? Object.values(params).join('|') : '';
-  window._paq.push(label ? ['trackEvent', 'prototype', name, label] : ['trackEvent', 'prototype', name]); // Matomo
-}
-function deleteTrackingCookies(){        // beim Widerruf: GA- und Matomo-Cookies entfernen
-  const host = location.hostname.split('.');
-  document.cookie.split(';').map(c => c.split('=')[0].trim())
-    .filter(n => n.startsWith('_ga') || n === '_gid' || n.startsWith('_pk_') || n.startsWith('mtm_'))
-    .forEach(n => {
-      for (let i = 0; i < host.length; i++){
-        const d = host.slice(i).join('.');
-        document.cookie = `${n}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${d}`;
-        document.cookie = `${n}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=.${d}`;
-      }
-      document.cookie = `${n}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
-    });
-}
-const banner = $('banner');
-const saved = localStorage.getItem(KEY);
-if (saved === 'granted') loadGTM(); else if (saved !== 'denied') banner.style.display = 'flex';
-$('accept').onclick  = () => { localStorage.setItem(KEY,'granted'); banner.style.display='none'; loadGTM(); };
-$('decline').onclick = () => { localStorage.setItem(KEY,'denied');  banner.style.display='none'; };
-$('reset-consent').onclick = () => { localStorage.removeItem(KEY); deleteTrackingCookies(); location.reload(); };
-
-/* ---------- Sprachen ---------- */
-const T = {
+extendT({
   de:{account:'Mein Konto',logged_out:'Nicht angemeldet',nav_products:'Alle Produkte',nav_cart:'Warenkorb',nav_tickets:'Meine Tickets',
     login:'Anmelden',headline:'Wohin soll es gehen?',tt_label:'Tickettyp',tt_single:'Einzel- und Tagestickets',tt_season:'Zeitkarten',
     res:'Nur Sitzplatzreservierung',res_hint:'Ich habe schon ein Ticket',from:'Von',to:'Nach',swap:'Von und Nach tauschen',
@@ -84,19 +27,6 @@ const T = {
     consent_text:'We measure how this page is used with Google Analytics (via Google Tag Manager) and Matomo – only after you agree. IP addresses are anonymised.',
     decline:'Decline',accept:'Accept',empty:'No searches yet.',done:'Prototype: connections would appear here.',
     missing:'Please enter origin and destination.',del:'Remove',conn:'Connection'}
-};
-let lang = 'de';
-function applyLang(l){
-  lang = l; document.documentElement.lang = l;
-  document.querySelectorAll('[data-i18n]').forEach(e => e.textContent = T[l][e.dataset.i18n]);
-  document.querySelectorAll('[data-i18n-ph]').forEach(e => e.placeholder = T[l][e.dataset.i18nPh]);
-  document.querySelectorAll('[data-i18n-aria]').forEach(e => e.setAttribute('aria-label', T[l][e.dataset.i18nAria]));
-  document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === l));
-  $('result').textContent = '';
-  renderRecent();
-}
-document.querySelectorAll('[data-lang]').forEach(b => b.onclick = () => {
-  if (b.dataset.lang !== lang){ applyLang(b.dataset.lang); track('language_change', {language: lang}); }
 });
 
 /* ---------- Suchformular ---------- */
@@ -148,8 +78,6 @@ $('search-form').addEventListener('submit', e => {
 });
 
 /* ---------- Weitere KPI-Events ---------- */
-$('login-btn').onclick   = () => track('login_click', {location: 'header'});
 $('saved-login').onclick = () => track('login_click', {location: 'saved_trips'});
-document.querySelectorAll('[data-cta]').forEach(b => b.onclick = () => track('cta_click', {cta_name: b.dataset.cta}));
 
-applyLang('de');
+window.onLang = renderRecent;

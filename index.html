@@ -6,21 +6,21 @@
 <meta http-equiv='pragma' content='no-cache'>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ticketshop Prototype – ÖBB</title>
+<title>Ticketshop Prototype</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <header class="site-header">
-  <a class="logo" href="#" aria-label="ÖBB Ticketshop">ÖBB</a>
+  <a class="logo" href="index.html" aria-label="ÖBB Ticketshop">ÖBB</a>
   <nav aria-label="Hauptnavigation">
     <button type="button" class="account" id="login-btn">
       <span class="avatar" aria-hidden="true">👤</span>
       <span><strong data-i18n="account">Mein Konto</strong><small data-i18n="logged_out">Nicht angemeldet</small></span>
     </button>
-    <a href="#" data-i18n="nav_products">Alle Produkte</a>
-    <a href="#" data-i18n="nav_cart">Warenkorb</a>
-    <a href="#" data-i18n="nav_tickets">Meine Tickets</a>
+    <a href="products.html" data-i18n="nav_products">Alle Produkte</a>
+    <a href="cart.html" data-i18n="nav_cart">Warenkorb</a>
+    <a href="tickets.html" data-i18n="nav_tickets">Meine Tickets</a>
     <div class="lang" role="group" aria-label="Sprache">
       <button type="button" data-lang="de" aria-pressed="true">DE</button>
       <button type="button" data-lang="en" aria-pressed="false">EN</button>
@@ -88,15 +88,15 @@
   <div class="two-col">
     <section class="panel">
       <div class="head"><h2 data-i18n="popular">Beliebte Produkte</h2>
-        <button type="button" class="soft" data-cta="all_products" data-i18n="all">Alle Produkte ›</button></div>
+        <button type="button" class="soft" data-cta="all_products" data-href="products.html" data-i18n="all">Alle Produkte ›</button></div>
       <ul class="products">
-        <li><button type="button" data-cta="vorteilscard"><span class="ico" aria-hidden="true">▬</span>
+        <li><button type="button" data-cta="vorteilscard" data-href="products.html"><span class="ico" aria-hidden="true">▬</span>
           <span><strong data-i18n="p1">Vorteilscard kaufen</strong><small data-i18n="p1d">Vorteilscard Classic, Jugend & Senior: ÖBB-Standardtickets um 50 % ermäßigt</small></span></button></li>
-        <li><button type="button" data-cta="erlebnis"><span class="ico" aria-hidden="true">✦</span>
+        <li><button type="button" data-cta="erlebnis" data-href="products.html"><span class="ico" aria-hidden="true">✦</span>
           <span><strong data-i18n="p2">ÖBB Erlebnistickets</strong><small data-i18n="p2d">Bahn und Freizeitangebot kombinieren und dabei sparen</small></span><span class="ext" aria-hidden="true">↗</span></button></li>
-        <li><button type="button" data-cta="einfach_raus"><span class="ico" aria-hidden="true">⇥</span>
+        <li><button type="button" data-cta="einfach_raus" data-href="products.html"><span class="ico" aria-hidden="true">⇥</span>
           <span><strong>Einfach-Raus-Ticket</strong><small data-i18n="p3d">Nahverkehrs-Ticket für 2–5 Personen</small></span></button></li>
-        <li><button type="button" data-cta="freizeit"><span class="ico" aria-hidden="true">⇥</span>
+        <li><button type="button" data-cta="freizeit" data-href="products.html"><span class="ico" aria-hidden="true">⇥</span>
           <span><strong data-i18n="p4">Freizeit-Tickets</strong><small data-i18n="p4d">Regionale Tagestickets für den Nahverkehr</small></span></button></li>
       </ul>
     </section>
@@ -126,6 +126,7 @@
   </div>
 </div>
 
+<script src="common.js"></script>
 <script src="index.js"></script>
 </body>
 </html>

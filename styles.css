@@ -7,6 +7,7 @@
 }
 *{box-sizing:border-box}
 img{max-width:100%}
+[hidden]{display:none!important}
 .route-row>*,.details-row>*,.two-col>*,.type-row>*{min-width:0}
 body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
 button,input,select{font:inherit;color:inherit}
@@ -34,6 +35,7 @@ small{display:block;color:var(--muted);font-size:.85rem}
 
 /* Layout */
 main{max-width:1000px;margin:calc(-1*clamp(36px,7vw,70px)) auto 0;padding:0 clamp(12px,3vw,16px) 140px;position:relative}
+main.subpage{margin-top:24px}
 .card,.panel{background:var(--card);border-radius:14px;padding:clamp(16px,3vw,24px)}
 .card{box-shadow:0 6px 24px rgba(20,30,60,.12);margin-bottom:16px}
 .panel{background:transparent;padding:20px 0 8px}
@@ -41,6 +43,7 @@ main{max-width:1000px;margin:calc(-1*clamp(36px,7vw,70px)) auto 0;padding:0 clam
 .two-col>.panel,.stack>.panel{background:color-mix(in srgb,var(--card) 55%,var(--bg));border-radius:14px;padding:clamp(16px,3vw,24px);margin-bottom:16px}
 .stack{display:flex;flex-direction:column}
 .head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+h1{margin:0 0 18px;font-size:1.6rem}
 h2{margin:0;font-size:1.05rem}
 .panel:not(.two-col>.panel):not(.stack>.panel){background:transparent}
 
@@ -60,6 +63,7 @@ select,input[type=text],input:not([type=checkbox]){width:100%;padding:14px;backg
 #result{margin:12px 0 0;min-height:1.4em;color:var(--muted)}
 .soft{border:0;background:var(--tint);padding:9px 16px;border-radius:6px;font-weight:600;font-size:.9rem;white-space:nowrap}
 .soft:hover{filter:brightness(.95)}
+a.soft{display:inline-block;text-decoration:none;color:inherit}
 
 /* Zuletzt gesucht */
 .chips{display:flex;gap:12px;flex-wrap:wrap}
@@ -80,6 +84,20 @@ select,input[type=text],input:not([type=checkbox]){width:100%;padding:14px;backg
 .steps{margin:0 0 12px;padding-left:22px;background:var(--card);border-radius:10px;padding:18px 18px 18px 40px}
 .hint{margin:0;color:var(--muted);font-size:.9rem}
 .link{background:none;border:0;color:var(--muted);text-decoration:underline;padding:0;margin-top:16px}
+
+/* Unterseiten (Produkte, Warenkorb, Meine Tickets) */
+.products .prow{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.prow .grow{flex:1 1 auto;min-width:0}
+.prow .grow small{margin-top:2px}
+.prow .price{font-weight:700;white-space:nowrap;margin-left:auto}
+.products .prow button{width:auto;flex:none;display:inline-block;border:0;background:var(--tint);padding:10px 16px;border-radius:6px;font-weight:600;white-space:nowrap}
+.products .prow button:hover{filter:brightness(.95)}
+.card .hint{margin-top:12px}
+.total{display:flex;justify-content:space-between;font-weight:700;margin:16px 0}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.notice{background:var(--tint);padding:14px;border-radius:10px;margin-top:12px}
+.notice p{margin:6px 0 12px}
+#cart-summary .primary,.notice .primary{padding:14px 32px}
 
 /* Cookie-Banner */
 .cookie-banner{position:fixed;inset:auto 0 0 0;background:var(--card);border-top:3px solid var(--red);padding:16px 24px;display:none;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;z-index:10}
@@ -115,6 +133,12 @@ select,input[type=text],input:not([type=checkbox]){width:100%;padding:14px;backg
   .cookie-banner{padding:14px 16px calc(14px + env(safe-area-inset-bottom))}
   .cookie-actions{width:100%}
   .cookie-actions button{flex:1}
+}
+@media (max-width:600px){
+  .products .prow{flex-wrap:wrap}
+  .prow .grow{flex:1 1 calc(100% - 60px)}
+  .prow .price{margin-left:58px}
+  .products .prow button{margin-left:auto}
 }
 @media (max-width:480px){
   .account>span:last-child{display:none}
