@@ -1,9 +1,22 @@
 const GTM_ID = 'GTM-KD3RTMKB';
+const MATOMO_URL = 'https://p54v94.matomo.cloud/';
+const MATOMO_SRC = 'https://cdn.matomo.cloud/p54v94.matomo.cloud/matomo.js';
 const KEY = 'analytics_consent';
 const $ = id => document.getElementById(id);
 let consented = false;
 
-/* ---------- Consent + GTM (lädt erst nach Zustimmung) ---------- */
+/* ---------- Consent + GTM (GA4) + Matomo (laden erst nach Zustimmung) ---------- */
+function loadMatomo(){
+  const _paq = window._paq = window._paq || [];
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  _paq.push(['setTrackerUrl', MATOMO_URL + 'matomo.php']);
+  _paq.push(['setSiteId', '1']);
+  const g = document.createElement('script');
+  g.async = true;
+  g.src = MATOMO_SRC;
+  document.head.appendChild(g);
+}
 function loadGTM(){
   if (consented) return;
   consented = true;
@@ -13,28 +26,33 @@ function loadGTM(){
   s.async = true;
   s.src = 'https://www.googletagmanager.com/gtm.js?id=' + GTM_ID;
   document.head.appendChild(s);
+  loadMatomo();
 }
 function track(name, params){            // ohne Einwilligung wird nichts gesendet
   if (!consented) return;
-  window.dataLayer.push(Object.assign({event: name}, params || {}));
+  window.dataLayer.push(Object.assign({event: name}, params || {}));      // GA4 via GTM
+  const label = params ? Object.values(params).join('|') : '';
+  window._paq.push(label ? ['trackEvent', 'prototype', name, label] : ['trackEvent', 'prototype', name]); // Matomo
 }
-function deleteGaCookies(){              // beim Widerruf: _ga*-Cookies entfernen
+function deleteTrackingCookies(){        // beim Widerruf: GA- und Matomo-Cookies entfernen
   const host = location.hostname.split('.');
-  document.cookie.split(';').map(c => c.split('=')[0].trim()).filter(n => n.startsWith('_ga')).forEach(n => {
-    for (let i = 0; i < host.length; i++){
-      const d = host.slice(i).join('.');
-      document.cookie = `${n}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${d}`;
-      document.cookie = `${n}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=.${d}`;
-    }
-    document.cookie = `${n}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
-  });
+  document.cookie.split(';').map(c => c.split('=')[0].trim())
+    .filter(n => n.startsWith('_ga') || n === '_gid' || n.startsWith('_pk_') || n.startsWith('mtm_'))
+    .forEach(n => {
+      for (let i = 0; i < host.length; i++){
+        const d = host.slice(i).join('.');
+        document.cookie = `${n}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${d}`;
+        document.cookie = `${n}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=.${d}`;
+      }
+      document.cookie = `${n}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+    });
 }
 const banner = $('banner');
 const saved = localStorage.getItem(KEY);
 if (saved === 'granted') loadGTM(); else if (saved !== 'denied') banner.style.display = 'flex';
 $('accept').onclick  = () => { localStorage.setItem(KEY,'granted'); banner.style.display='none'; loadGTM(); };
 $('decline').onclick = () => { localStorage.setItem(KEY,'denied');  banner.style.display='none'; };
-$('reset-consent').onclick = () => { localStorage.removeItem(KEY); deleteGaCookies(); location.reload(); };
+$('reset-consent').onclick = () => { localStorage.removeItem(KEY); deleteTrackingCookies(); location.reload(); };
 
 /* ---------- Sprachen ---------- */
 const T = {
@@ -49,7 +67,7 @@ const T = {
     s1:'Gewünschte Verbindung suchen',s2:'Reisedetails öffnen',s3:'Auf das Herzsymbol bei „Merken“ klicken',
     saved_hint:'Melde dich an, um Verbindungen zu speichern und auf allen Geräten wiederzufinden.',routes_empty:'Noch keine Strecken gemerkt.',
     cookie_settings:'Cookie-Einstellungen ändern',
-    consent_text:'Wir messen mit Google Analytics (über den Google Tag Manager), wie diese Seite genutzt wird – erst nach deiner Zustimmung. IP-Adressen werden anonymisiert.',
+    consent_text:'Wir messen mit Google Analytics (über den Google Tag Manager) und Matomo, wie diese Seite genutzt wird – erst nach deiner Zustimmung. IP-Adressen werden anonymisiert.',
     decline:'Ablehnen',accept:'Zustimmen',empty:'Noch keine Suchen.',done:'Prototype: Hier würden die Verbindungen erscheinen.',
     missing:'Bitte Start und Ziel angeben.',del:'Entfernen',conn:'Verbindung'},
   en:{account:'My account',logged_out:'Not logged in',nav_products:'All products',nav_cart:'Cart',nav_tickets:'My tickets',
@@ -63,7 +81,7 @@ const T = {
     s1:'Search for a connection',s2:'Open trip details',s3:'Click the heart icon next to “Save”',
     saved_hint:'Log in to save connections and find them on all your devices.',routes_empty:'No saved routes yet.',
     cookie_settings:'Change cookie settings',
-    consent_text:'We measure how this page is used with Google Analytics (via Google Tag Manager) – only after you agree. IP addresses are anonymised.',
+    consent_text:'We measure how this page is used with Google Analytics (via Google Tag Manager) and Matomo – only after you agree. IP addresses are anonymised.',
     decline:'Decline',accept:'Accept',empty:'No searches yet.',done:'Prototype: connections would appear here.',
     missing:'Please enter origin and destination.',del:'Remove',conn:'Connection'}
 };
