@@ -3,13 +3,15 @@
   --bg:#eef0f4; --card:#fff; --line:#c3c8d4; --tint:#dcecf8; --focus:#000;
 }
 @media (prefers-color-scheme:dark){
-  :root{--ink:#eef1f6;--muted:#b4bccc;--bg:#141a26;--card:#1d2433;--line:#4a5470;--tint:#26314a;--red:#ff5a73;--red-dark:#ff7d90;--focus:#fff}
+  :root{--ink: #ffffff;--muted:#b4bccc;--bg:#141a26;--card:#1d2433;--line:#4a5470;--tint:#26314a;--red:#ff5a73;--red-dark:#ff7d90;--focus:#fff}
 }
 *{box-sizing:border-box}
 img{max-width:100%}
 [hidden]{display:none!important}
 .route-row>*,.details-row>*,.two-col>*,.type-row>*{min-width:0}
-body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);
+  color:var(--ink);
+  line-height:1.45}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:2px solid var(--focus);outline-offset:2px}
@@ -86,7 +88,11 @@ a.soft{display:inline-block;text-decoration:none;color:inherit}
 .link{background:none;border:0;color:var(--muted);text-decoration:underline;padding:0;margin-top:16px}
 
 /* Unterseiten (Produkte, Warenkorb, Meine Tickets) */
-.products .prow{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.products .prow{display:flex;align-items:center;gap:14px;
+  background: #0e121c;
+  border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+
+
 .prow .grow{flex:1 1 auto;min-width:0}
 .prow .grow small{margin-top:2px}
 .prow .price{font-weight:700;white-space:nowrap;margin-left:auto}

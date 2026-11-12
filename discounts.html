@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Discounts selection – Ticketshop Prototype</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="products">
+
+<header class="site-header">
+    <a class="logo" href="index.html" aria-label="ÖBB Ticketshop">ÖBB</a>
+    <nav aria-label="Hauptnavigation">
+        <button type="button" class="account" id="login-btn">
+            <span class="avatar" aria-hidden="true">👤</span>
+            <span><strong data-i18n="account">Mein Konto</strong><small data-i18n="logged_out">Nicht angemeldet</small></span>
+        </button>
+        <a href="products.html" data-i18n="nav_products">Alle Produkte</a>
+        <a href="cart.html" data-i18n="nav_cart">Warenkorb</a>
+        <a href="tickets.html" data-i18n="nav_tickets">Meine Tickets</a>
+        <div class="lang" role="group" aria-label="Sprache">
+            <button type="button" data-lang="de" aria-pressed="true">DE</button>
+            <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+    </nav>
+</header>
+
+<main class="subpage">
+    <section class="card">
+
+
+
+
+
+        <h1 data-i18n="products_h">Ermäßigungen</h1>
+        <ul class="products" id="product-list"></ul>
+        <p id="msg" class="hint" role="status" aria-live="polite"></p>
+        <h2 id="applied-h" style="margin-top: 24px; margin-bottom: 10px;">Angewendete Ermäßigungen</h2>
+        <ul class="products" id="applied-list"></ul>
+        <div class="actions">
+            <button type="button" class="primary" onclick="sessionStorage.setItem('from_discounts', 'true'); location.href='index.html'" data-i18n="d_apply_back" style="padding-top: 20px; padding-bottom: 20px;">Auswahl übernehmen & Zurück</button>        </div>
+
+
+
+
+
+    </section>
+    <button type="button" class="link" id="reset-consent" data-i18n="cookie_settings">Cookie-Einstellungen ändern</button>
+</main>
+
+<div id="banner" class="cookie-banner" role="dialog" aria-label="Cookie-Einwilligung" aria-describedby="consent_text">
+    <p id="consent_text" data-i18n="consent_text"></p>
+    <div class="cookie-actions">
+        <button type="button" id="decline" data-i18n="decline">Ablehnen</button>
+        <button type="button" id="accept" data-i18n="accept">Zustimmen</button>
+    </div>
+</div>
+
+<script src="common.js"></script>
+<script src="discounts.js"></script>
+</body>
+</html>

@@ -73,8 +73,14 @@
         <div class="inline"><input id="time" type="time"><button type="button" class="soft" id="now-btn" data-i18n="now">Jetzt</button></div></div>
       <div class="field"><label for="pax" data-i18n="pax">Reisende</label>
         <select id="pax"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
-      <div class="field"><label for="disc" data-i18n="disc">Ermäßigung</label>
-        <select id="disc"><option value="none" data-i18n="disc_none">Keine</option><option value="classic">Vorteilscard Classic</option><option value="youth">Vorteilscard Jugend</option><option value="senior">Vorteilscard Senior</option></select></div>
+      <div class="field">
+        <label for="disc-btn" data-i18n="disc">Ermäßigung</label>
+        <button type="button" class="soft" id="disc-btn" style="width:100%; text-align:left; justify-content:space-between; display:flex;">
+          <span data-i18n="d_choose">Auswählen</span>
+          <span aria-hidden="true">›</span>
+        </button>
+        <small id="disc-summary" style="display: block; margin-top: 4px; color: #666;" data-i18n="disc_none">Keine</small>
+      </div>
     </div>
     <p id="result" role="status" aria-live="polite"></p>
   </form>
