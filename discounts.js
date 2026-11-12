@@ -266,6 +266,13 @@ extendT({
 });
 
   const KEY_D = 'discounts';
+
+  // Track discount selector opened once per session (robust fallback if opened directly)
+  if (!sessionStorage.getItem('discount_selector_opened_tracked')) {
+    sessionStorage.setItem('discount_selector_opened_tracked', 'true');
+    track('discount_selector_opened');
+  }
+
   const navEntry = performance.getEntriesByType('navigation')[0];
   if (navEntry && navEntry.type === 'reload') {
     localStorage.removeItem(KEY_D);
@@ -287,60 +294,61 @@ extendT({
   const saveD = v => { try { localStorage.setItem(KEY_D, JSON.stringify(v)); } catch(e){} };
   const nm = x => x.name[lang];
 
-function mk(tag, cls, text){
-  const e = document.createElement(tag);
-  if (cls) e.className = cls;
-  if (text !== undefined) e.textContent = text;
-  return e;
-}
-function mkRow(title, sub, icon, btnText, onClick){
-  const li = mk('li'), r = mk('div', 'prow'), ico = mk('span', 'ico', icon), txt = mk('div', 'grow');
-  ico.setAttribute('aria-hidden', 'true');
-  txt.appendChild(mk('strong', '', title));
-  if (sub) txt.appendChild(mk('small', '', sub));
-  r.append(ico, txt);
-  const b = mk('button', 'soft', btnText); b.type = 'button'; b.onclick = onClick;
-  r.appendChild(b); li.appendChild(r); return li;
-}
-
-function render(){
-  const ul = $('product-list'); ul.textContent = '';
-  if (path.length){
-    const last = path[path.length - 1];
-    ul.appendChild(mkRow(nm(last), path.map(nm).join(' › '), '✓', T[lang].d_back, () => { path.pop(); render(); track('discount_back'); }));
+  function mk(tag, cls, text){
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = text;
+    return e;
   }
-  const options = path.length ? path[path.length - 1].next : STEPS;
-  options.forEach(o => {
-    const leaf = !o.next || !o.next.length;
-    ul.appendChild(mkRow(nm(o), '', '▬', leaf ? T[lang].d_apply : T[lang].d_choose, () => choose(o, leaf)));
-  });
-  $('msg').textContent = path.length ? '' : T[lang].d_pick;
-  renderApplied();
-}
+  function mkRow(title, sub, icon, btnText, onClick){
+    const li = mk('li'), r = mk('div', 'prow'), ico = mk('span', 'ico', icon), txt = mk('div', 'grow');
+    ico.setAttribute('aria-hidden', 'true');
+    txt.appendChild(mk('strong', '', title));
+    if (sub) txt.appendChild(mk('small', '', sub));
+    r.append(ico, txt);
+    const b = mk('button', 'soft', btnText); b.type = 'button'; b.onclick = onClick;
+    r.appendChild(b); li.appendChild(r); return li;
+  }
 
-function choose(o, leaf){
-  if (!leaf){ path.push(o); render(); track('discount_step', {step: path.length}); return; }
-  const full = path.concat(o);
-  const label = {de: full.map(x => x.name.de).join(' › '), en: full.map(x => x.name.en).join(' › ')};
-  const list = loadD().filter(x => x.de !== label.de);
-  list.push(label); saveD(list);
-  path = [];
-  render();
-  $('msg').textContent = T[lang].d_done + label[lang];
-  track('discount_apply', {discount: label.de});
-}
+  function render(){
+    const ul = $('product-list'); ul.textContent = '';
+    if (path.length){
+      const last = path[path.length - 1];
+      ul.appendChild(mkRow(nm(last), path.map(nm).join(' › '), '✓', T[lang].d_back, () => { path.pop(); render(); track('discount_back'); }));
+    }
+    const options = path.length ? path[path.length - 1].next : STEPS;
+    options.forEach(o => {
+      const leaf = !o.next || !o.next.length;
+      ul.appendChild(mkRow(nm(o), '', '▬', leaf ? T[lang].d_apply : T[lang].d_choose, () => choose(o, leaf)));
+    });
+    $('msg').textContent = path.length ? '' : T[lang].d_pick;
+    renderApplied();
+  }
 
-function renderApplied(){
-  const h = $('applied-h'), ul = $('applied-list');
-  if (!ul) return;
-  if (h) h.textContent = T[lang].d_applied_h;
-  ul.textContent = '';
-  const list = loadD();
-  if (!list.length){ ul.appendChild(mk('li', 'empty', T[lang].d_none)); return; }
-  list.forEach(x => ul.appendChild(mkRow(x[lang], '', '%', T[lang].d_remove, () => {
-    saveD(loadD().filter(y => y.de !== x.de)); renderApplied(); track('discount_remove');
-  })));
-}
+  function choose(o, leaf){
+    if (!leaf){ path.push(o); render(); track('discount_step', {step: path.length}); return; }
+    const full = path.concat(o);
+    const label = {de: full.map(x => x.name.de).join(' › '), en: full.map(x => x.name.en).join(' › ')};
+    const list = loadD().filter(x => x.de !== label.de);
+    list.push(label); saveD(list);
+    path = [];
+    render();
+    $('msg').textContent = T[lang].d_done + label[lang];
+    track('discount_apply', {discount: label.de});
+    track('discount_selected', {discount: label.de}); // <--- Added tracking for completion rate formula
+  }
 
-window.onLang = render;
+  function renderApplied(){
+    const h = $('applied-h'), ul = $('applied-list');
+    if (!ul) return;
+    if (h) h.textContent = T[lang].d_applied_h;
+    ul.textContent = '';
+    const list = loadD();
+    if (!list.length){ ul.appendChild(mk('li', 'empty', T[lang].d_none)); return; }
+    list.forEach(x => ul.appendChild(mkRow(x[lang], '', '%', T[lang].d_remove, () => {
+      saveD(loadD().filter(y => y.de !== x.de)); renderApplied(); track('discount_remove');
+    })));
+  }
+
+  window.onLang = render;
 })();

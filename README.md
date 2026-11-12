@@ -22,6 +22,8 @@ A small, static prototype of a train-ticket shop landing page, built for a group
 | `styles.css` | Styling (light/dark, responsive) |
 | `index.js` | Consent handling, GTM loading, event tracking, language switch, recent searches |
 | `background_d5968060.svg` | SVG of OEBB |
+| `discount_selector_opened` | Discount menu opened (first time in session) | – |
+| `discount_selected` | Discount successfully chosen & applied | `discount` |
 
 No build step and no dependencies. Open `index.html` in a browser or serve the folder with any static host (e.g. GitHub Pages).
 

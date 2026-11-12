@@ -135,6 +135,10 @@ function updateDiscountButton(){
 }
 
 $('disc-btn').onclick = () => {
+  if (!sessionStorage.getItem('discount_selector_opened_tracked')) {
+    sessionStorage.setItem('discount_selector_opened_tracked', 'true');
+    track('discount_selector_opened');
+  }
   track('open_discounts_selector');
   location.href = 'discounts.html';
 };
